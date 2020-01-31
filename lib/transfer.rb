@@ -20,10 +20,6 @@ class Transfer
     end
   end
 
-
-
-  # if sender or receiever balance has changed 
-  # then stop further changes
   def execute_transaction
     if @sender.valid? && @receiver.valid? && !(@sender.balance - @amount < 0) && self.status == 'pending'
       @sender.balance -= @amount
@@ -34,23 +30,11 @@ class Transfer
       "Transaction rejected. Please check your account balance."  
     end
   end
-
-
-
-
-  #       if !(@sender.balance - @amount < 0)
-  #         binding.pry
-  #         if self.status == 'pending'
-  #           @sender.balance -= @amount
-  #           @receiver.balance += @amount
-  #           @status = "complete"
-  #         end
-  #       else
-  #     "Transaction rejected. Please check your account balance."
-  #     end
-  # end
+  def reverse_transfer
+    if @status == 'complete'
+      @sender.balance += @amount
+      @receiver.balance -= @amount
+      @status = 'reversed' 
+    end
+  end
 end
-
-
-# else
-  # "Transaction rejected. Please check your account balance."
